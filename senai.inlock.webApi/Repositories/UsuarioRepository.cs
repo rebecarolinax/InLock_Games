@@ -1,58 +1,43 @@
-﻿using senai.inlock.webApi.Domains;
+﻿using System.Data.SqlClient;
+using senai.inlock.webApi.Domains;
 using senai.inlock.webApi.Interfaces;
-using System.Data.SqlClient;
 
 namespace senai.inlock.webApi.Repositories
 {
-    /// <summary>
-    /// Classe responsável pelo repositório dos usuários
-    /// </summary>
     public class UsuarioRepository : IUsuarioRepository
     {
-        //inicia-se a lógica de conexão ao banco de dados
         private string stringConexao = "Data Source = NOTE09-S14; Initial Catalog = inlock_games; User Id = sa; Pwd = Senai@134";
         public UsuarioDomain Login(string email, string senha)
         {
-            //definida a conexão
             using (SqlConnection con = new SqlConnection(stringConexao))
             {
-                //definida a execução do banco de dados
-                string queryLogin = "SELECT Usuario WHERE Email = @email AND Senha = @senha";
+                string querySearch = "SELECT IdUsuario, Email, IdTipoUsuario FROM Usuario WHERE Email = @Email AND Senha = @Senha";
 
-                using (SqlCommand cmd = new SqlCommand(queryLogin, con))
+                using (SqlCommand cmd = new SqlCommand(querySearch, con))
                 {
-                    //definido os valores dos parâmetros
-                    cmd.Parameters.AddWithValue("@email", email);
-                    cmd.Parameters.AddWithValue("@senha", senha);
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    cmd.Parameters.AddWithValue("@Senha", senha);
 
-                    //aberta a conexão com banco de dados
                     con.Open();
 
-                    //executado o comando e armazenado os dados no rdr
-                    SqlDataReader rdr = cmd.ExecuteReader();
+                    SqlDataReader rdr;
 
-                    //se obtido os dados:
+                    rdr = cmd.ExecuteReader();
+
                     if (rdr.Read())
                     {
-                        //criado objeto Domain
-                        UsuarioDomain usuarioEncontrado = new UsuarioDomain()
+                        UsuarioDomain usuario = new UsuarioDomain
                         {
-                            //atribuída os valores das propriedades do banco de dados
-                            IdUsuario = Convert.ToInt32(rdr["idUsuario"]),
-                            Email = rdr["email"].ToString(),
-                            IdTipoUsuario = Convert.ToInt32(rdr["idTipoUsuario"]),
-
-                                 //criada instância do objeto herdado
-                                 TipoUsuario = new TipoUsuarioDomain()
-                                 {
-                                     Titulo= rdr["titulo"].ToString()
-                                 }
+                            IdUsuario = Convert.ToInt32(rdr["IdUsuario"]),
+                            Email = rdr["Email"].ToString(),
+                            IdTipoUsuario = Convert.ToInt32(rdr["IdTipoUsuario"])
                         };
-                            //retorna o usuário buscado
-                            return usuarioEncontrado;
+                        return usuario;
                     }
-                        //caso não encontre um e-mail e senha correspondente, retorna null
+                    else
+                    {
                         return null;
+                    }
                 }
             }
         }

@@ -2,25 +2,16 @@
 
 namespace senai.inlock.webApi.Domains
 {
-    /// <summary>
-    /// Classe que representa a entidade (tabela) de usuários 
-    /// </summary>
     public class UsuarioDomain
     {
         public int IdUsuario { get; set; }
-
-        //define que o campo é obrigatório
-        [Required(ErrorMessage = "Informe o e-mail!")]
-        public string? Email { get; set; }
-
-        //define que o campo é obrigatório
-        [Required(ErrorMessage = "Informe a senha!")]
-        //define a quantidade de caracteres da senha
-        [StringLength(100, MinimumLength = 5, ErrorMessage = "A senha deve conter 5 caracteres!")]
-        public string? Senha { get; set; }
         public int IdTipoUsuario { get; set; }
-        
-        //refere-se a entidade de tipos de usuário que será herdada em usuários
-        public TipoUsuarioDomain? TipoUsuario { get; set; }
+
+        [Required(ErrorMessage = "O campo e-mail é obrigtório!")]
+        public string Email { get; set; }
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "A senha deve ter de 3 a 20 caracteres!")]
+        [Required(ErrorMessage = "O campo senha é obrigtório!")]
+        public string Senha { get; set; }
+        public TiposUsuarioDomain TiposUsuario { get; set; }
     }
 }
