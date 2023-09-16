@@ -1,4 +1,4 @@
-# InLock_Games
+# InLock_Games 🎮
 Uma empresa do ramo de games, a **InLock**, deseja realizar a criação de sua base de dados
 para armazenar os **jogos que são vendidos em sua loja**. Além disso, como eles já
 possuem um desenvolvedor Front-End atuando na empresa, **não será necessário**
